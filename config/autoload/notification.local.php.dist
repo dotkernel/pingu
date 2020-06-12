@@ -1,0 +1,8 @@
+<?php
+
+return [
+    'notification' => [
+        'protocol' => 'http', // https or http
+        'host' => 'app.com' //add port if needed ex : app.com:8080
+    ]
+];

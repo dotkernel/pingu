@@ -1,0 +1,37 @@
+<?php
+
+return [
+    'dot-swoole' => [
+        // Available in Swoole 4.1 and up; enables coroutine support
+        // for most I/O operations:
+        'enable_coroutine' => true,
+
+        'swoole-server' => [
+            'host' => 'localhost',
+            'port' => 8556,
+            'mode' => SWOOLE_PROCESS, // SWOOLE_BASE or SWOOLE_PROCESS;
+            'protocol' => SWOOLE_SOCK_TCP, //| SWOOLE_SSL, // SSL-enable the server
+            'options' => [
+                'task_worker_num' => 3, // The number of Task Workers
+
+                // Set the SSL certificate and key paths for SSL support:
+                'ssl_cert_file' => 'path/to/ssl.crt',
+                'ssl_key_file' => 'path/to/ssl.key',
+
+                'package_eof' => "\n",
+                'open_eof_check' => true,
+                'open_length_check' => true,
+
+                // Overwrite the default location of the pid file;
+                // required when you want to run multiple instances of your service in different ports:
+                'pid_file' => '/tmp/pingu.pid',
+            ],
+            // Since 2.1.0: Set the process name prefix.
+            // The master process will be named `{prefix}-master`,
+            // worker processes will be named `{prefix}-worker-{id}`,
+            // and task worker processes will be named `{prefix}-task-worker-{id}`
+            'process-name' => 'pingu',
+        ],
+    ],
+];
+

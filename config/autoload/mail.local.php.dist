@@ -1,0 +1,20 @@
+<?php
+
+return [
+    'mail' => [
+        'name'              => 'smtp.gmail.com',
+        'host'              => 'smtp.gmail.com',
+        'port'              => 587,
+        'connection_class'  => 'login',
+        'connection_config'  => [
+            'username' => '****@***.com',
+            'password' => '*****',
+            'host'=>'localhost:8556',
+            'ssl'      => 'tls',
+        ]
+    ],
+    'application' => [
+        'name' => 'My app',
+        'email' => 'app@eamil.com'
+    ]
+];

@@ -1,0 +1,68 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Start, stop, and reload the server.
+ */
+
+declare(strict_types=1);
+
+namespace Dot\Swoole\Command;
+
+use Symfony\Component\Console\Application as CommandLine;
+use Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
+
+use function chdir;
+use function file_exists;
+use function fwrite;
+use function is_dir;
+use function sprintf;
+use function strstr;
+use function str_repeat;
+
+use const PHP_EOL;
+use const STDERR;
+
+// Setup/verify autoloading
+$depth = 1;
+while ($depth <= 4) {
+    $dir = sprintf('%s/%s', __DIR__, str_repeat('../', $depth));
+    if (is_dir($dir . 'vendor')) {
+        $cwd = $dir;
+    }
+
+    $depth += 1;
+}
+
+if (! isset($cwd)) {
+    fwrite(STDERR, 'Cannot locate autoloader; please run "composer install"' . PHP_EOL);
+    exit(1);
+}
+
+chdir($cwd);
+
+require 'vendor/autoload.php';
+
+// Setup/verify application DI container
+$containerFile = sprintf('%s/config/container.php', $cwd);
+if (! file_exists($containerFile)) {
+    fwrite(STDERR, sprintf(
+        'No container file (%s) detected; are you in an Expressive application?%s',
+        $containerFile,
+        PHP_EOL
+    ));
+    exit(1);
+}
+
+$container = require $containerFile;
+
+// Create, populate, and run the CLI tooling
+$commandLine = new CommandLine('Dotkernel swoole web server');
+$commandLine->setAutoExit(true);
+$commandLine->setCommandLoader(new ContainerCommandLoader($container, [
+    'reload' => ReloadCommand::class,
+    'start'  => StartCommand::class,
+    'status' => StatusCommand::class,
+    'stop'   => StopCommand::class,
+]));
+
+$commandLine->run();

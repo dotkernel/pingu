@@ -1,0 +1,66 @@
+<?php
+/**
+ * Local configuration.
+ *
+ * Copy this file to `local.php` and change its settings as required.
+ * `local.php` is ignored by git and safe to use for local and sensitive data like usernames and passwords.
+ */
+
+declare(strict_types=1);
+
+$database = [
+    'hostname' => '',
+    'database' => '',
+    'username' => '',
+    'password' => '',
+    'port' => 3306,
+    'driver' => 'pdo_mysql',
+    'charset' => 'utf8mb4',
+    'collate' => 'utf8mb4_general_ci',
+    //add more database connection params
+];
+
+return [
+    'database' => $database,
+
+    'doctrine' => [
+        'connection' => [
+            'orm_default' => [
+                'driverClass' => \Doctrine\DBAL\Driver\PDOMySql\Driver::class,
+                'params' => [
+                    'host' => $database['hostname'],
+                    'port' => $database['port'],
+                    'user' => $database['username'],
+                    'password' => $database['password'],
+                    'dbname' => $database['database'],
+                    'charset' => $database['charset'],
+                    'collate' => $database['collate'],
+                ],
+            ],
+        ],
+    ],
+
+    'cors' => [
+        'origin' => ['*'],
+        'methods' => ['DELETE', 'GET', 'OPTIONS', 'PATCH', 'POST', 'PUT'],
+        'headers.allow' => ['Accept', 'Content-Type', 'Authorization'],
+        'headers.expose' => [],
+        'credentials' => false,
+        'cache' => 0,
+        'error' => [
+            \App\Cors\Factory\CorsFactory::class, 'error'
+        ]
+    ],
+
+    'connections' => [
+        'redis' => [
+            'driver' => 'redis',
+            'connection' => 'default',
+            'queue' => 'raw',
+            'retry_after' => 90,
+            'block_for' => null,
+        ],
+    ],
+
+    'api_url' => 'http://localhost:8081',
+];

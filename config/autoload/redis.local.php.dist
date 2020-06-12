@@ -1,0 +1,15 @@
+<?php
+
+return [
+    'queuejitsu' => [
+        'cli' => [
+            'store' => [
+                'redis' => [
+                    'scheme' => 'tcp',
+                    'host' => 'localhost',
+                    'port' => 6379,
+                ]
+            ]
+        ]
+    ]
+];
