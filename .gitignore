@@ -1,0 +1,7 @@
+# Admin-specific stuff:
+.idea
+
+### Composer template
+composer.phar
+composer.lock
+/vendor/
